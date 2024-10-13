@@ -39,6 +39,8 @@ jobs:
           aws eks update-kubeconfig --name devops-task-cluster --region eu-west-2
           kubectl get pods
           img_tag=$(date +"%Y%m%d%H%M%S")
+          cd app
+          ls -l
           docker build -t task-app:${img_tag} .
           docker images
           kubectl set image deployment task-app=task-app:${img_tag}
