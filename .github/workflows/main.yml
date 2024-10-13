@@ -23,12 +23,10 @@ jobs:
           unzip awscliv2.zip
           sudo ./aws/install --update
           aws --version 
+          echo "configuring aws credentials"
           export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
           export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
           export AWS_SESSION_TOKEN=${{ secrets.AWS_SESSION_TOKEN }}
-          echo "access key ${{ secrets.AWS_ACCESS_KEY_ID }}"
-          echo "printing caller identity to test aws cli"
-          # aws sts get-caller-identity
           echo "installing kubectl"
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
@@ -36,18 +34,24 @@ jobs:
           mkdir -p ~/.local/bin
           mv ./kubectl ~/.local/bin/kubectl
           kubectl version --client
+          echo "updating kubconfig file"
           aws eks update-kubeconfig --name devops-task-cluster --region eu-west-2
+          echo "listing pods to test kubernetes connectivity"
           kubectl get pods
           img_tag=$(date +"%Y%m%d%H%M%S")
           cd app
           ls -l
+          echo "building docker image"
           docker build -t task-app:${img_tag} .
+          echo "listing docker images"
+          docker images
+          echo "login to ECR"
           aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 146366115606.dkr.ecr.eu-west-2.amazonaws.com
           docker tag task-app:${img_tag} 146366115606.dkr.ecr.eu-west-2.amazonaws.com/task-app:${img_tag}
           docker tag task-app:${img_tag} 146366115606.dkr.ecr.eu-west-2.amazonaws.com/task-app:latest
+          echo "pushing image to ecr"
           docker push 146366115606.dkr.ecr.eu-west-2.amazonaws.com/task-app:${img_tag}
           docker push 146366115606.dkr.ecr.eu-west-2.amazonaws.com/task-app:latest
-          docker images
           kubectl set image deployment task-app-deployment task-app=146366115606.dkr.ecr.eu-west-2.amazonaws.com/task-app:${img_tag}
           sleep 2
           kubectl rollout restart deployment task-app-deployment
