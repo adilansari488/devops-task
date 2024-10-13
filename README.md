@@ -10,12 +10,12 @@
 
 #### Conifugre SNS and SQS
 
-- Created a standard SNS topic with name "devops-task-sns"
-- Created a standard SQS with name "devops-task-sqs" and default settings and subscribed to SNS topic created above.
+- Created a standard SNS topic with name **devops-task-sns**
+- Created a standard SQS with name **devops-task-sqs** and default settings and subscribed to SNS topic created above.
 
 #### Create AWS Lambda Function and Postgres DB
 
-- Created a lamdba function with "devops-task-lambda" name and python 3.10 Runtime, and x86_64 Architecture.
+- Created a lamdba function with **devops-task-lambda-function** name and python 3.10 Runtime, and x86_64 Architecture.
 - Added previously created SQS as lamdba function trigger.
 - Added required code and additional libraries to lambda function.
 - Created AWS RDS for posgresql DB free tier DB instance.
@@ -79,4 +79,5 @@ docker push 146366115606.dkr.ecr.eu-west-2.amazonaws.com/task-app:latest
 ![s3 logfile ss](images/image-1.png)
 ![alt text](images/image-2.png)
 ![k8s app ss](images/image-3.png)
+![lambda cloudwatch logs](images/image-4.png)
 
