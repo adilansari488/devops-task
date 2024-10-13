@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: task-app-service
+spec:
+  selector:
+    app: task-app
+  ports:
+  - name: task-app
+    port: 8090
+    protocol: TCP
+    targetPort: 8090
+
