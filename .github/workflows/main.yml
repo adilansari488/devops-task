@@ -28,7 +28,7 @@ jobs:
           export AWS_SESSION_TOKEN=${{ secrets.AWS_SESSION_TOKEN }}
           echo "access key ${{ secrets.AWS_ACCESS_KEY_ID }}"
           echo "printing caller identity to test aws cli"
-          aws sts get-caller-identity
+          # aws sts get-caller-identity
           echo "installing kubectl"
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
