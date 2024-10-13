@@ -42,8 +42,13 @@ jobs:
           cd app
           ls -l
           docker build -t task-app:${img_tag} .
+          aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 146366115606.dkr.ecr.eu-west-2.amazonaws.com
+          docker tag task-app:latest 146366115606.dkr.ecr.eu-west-2.amazonaws.com/task-app:${img_tag}
+          docker tag task-app:latest 146366115606.dkr.ecr.eu-west-2.amazonaws.com/task-app:latest
+          docker push 146366115606.dkr.ecr.eu-west-2.amazonaws.com/task-app:${img_tag}
+          docker push 146366115606.dkr.ecr.eu-west-2.amazonaws.com/task-app:latest
           docker images
-          kubectl set image deployment task-app=task-app:${img_tag}
+          kubectl set image deployment task-app-deployment task-app=task-app:${img_tag}
           sleep 2
           kubectl rollout restart deployment task-app-deployment
           
