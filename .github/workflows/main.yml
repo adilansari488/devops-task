@@ -38,8 +38,9 @@ jobs:
           kubectl version --client
           aws eks update-kubeconfig --name devops-task-cluster --region eu-west-2
           kubectl get pods
-          docker build -t task-app:latest
-          kubectl set image deployment task-app=task-app:latest
+          img_tag=$(date +"%Y%m%d%H%M%S")
+          docker build -t task-app:${img_tag}
+          kubectl set image deployment task-app=task-app:${img_tag}
           sleep 2
           kubectl rollout restart deployment task-app-deployment
           
